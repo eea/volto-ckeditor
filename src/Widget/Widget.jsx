@@ -2,7 +2,7 @@ import React from 'react';
 import { map } from 'lodash';
 import { Label } from 'semantic-ui-react';
 
-const CKText = ({
+const CKEditorWidget = ({
   id,
   title,
   required,
@@ -71,4 +71,4 @@ const CKText = ({
   );
 };
 
-export default CKText;
+export default CKEditorWidget;
