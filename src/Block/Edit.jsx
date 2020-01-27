@@ -62,10 +62,21 @@ class Edit extends Component {
 
       this.state = {
         htmltext,
+        CKEditor: false,
+        ClassicEditor: false,
       };
     }
 
     this.onChange = this.onChange.bind(this);
+  }
+
+  componentDidMount() {
+    import(/* webpackChunkName: 'ckeditor' */ '@ckeditor/ckeditor5-react').then(
+      module => this.setState({ CKEditor: module.default }),
+    );
+    import(
+      /* webpackChunkName: 'classiCk' */ '@ckeditor/ckeditor5-build-classic'
+    ).then(module => this.setState({ ClassicEditor: module.default }));
   }
 
   onChange(event, editor) {
@@ -74,7 +85,7 @@ class Edit extends Component {
       ...this.props.data,
       cktext,
     });
-    this.node.focus()
+    this.node.focus();
   }
 
   /**
@@ -87,8 +98,9 @@ class Edit extends Component {
       return <div />;
     }
 
-    const CKEditor = require('@ckeditor/ckeditor5-react');
-    const ClassicEditor = require('@ckeditor/ckeditor5-build-classic');
+    const CKEditor = this.state.CKEditor;
+    const ClassicEditor = this.state.ClassicEditor;
+    console.log('asdsdas', CKEditor, ClassicEditor)
     // console.log(
     //   'plugins',
     //   ClassicEditor.builtinPlugins.map(plugin => plugin.pluginName),
@@ -154,20 +166,24 @@ class Edit extends Component {
         className={cx('block text', { selected: this.props.selected })}
         // ref={node => (this.ref = node)}
       >
-        <CKEditor
-          config={editorConfiguration}
-          editor={ClassicEditor}
-          data={this.state.htmltext}
-          onInit={editor => {
-            // You can store the "editor" and use when it is needed.
-            // console.log('Editor is ready to use!', editor);
-            this.node = editor.ui.getEditableElement();
-            this.node.focus();
-          }}
-          onChange={this.onChange}
-          onBlur={(event, editor) => {}}
-          onFocus={(event, editor) => {}}
-        />
+        {CKEditor && ClassicEditor ? (
+          <CKEditor
+            config={editorConfiguration}
+            editor={ClassicEditor}
+            data={this.state.htmltext}
+            onInit={editor => {
+              // You can store the "editor" and use when it is needed.
+              // console.log('Editor is ready to use!', editor);
+              this.node = editor.ui.getEditableElement();
+              this.node.focus();
+            }}
+            onChange={this.onChange}
+            onBlur={(event, editor) => {}}
+            onFocus={(event, editor) => {}}
+          />
+        ) : (
+          'asdsdassa'
+        )}
       </div>
     );
   }

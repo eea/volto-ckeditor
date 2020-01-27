@@ -13,8 +13,12 @@ const CKEditorWidget = ({
   fieldSet,
 }) => {
   if (__SERVER__) return <div />;
-  const CKEditor = require('@ckeditor/ckeditor5-react');
-  const ClassicEditor = require('@ckeditor/ckeditor5-build-classic');
+  const CKEditor = import(
+    /* webpackChunkName: 'ckeditor' */ '@ckeditor/ckeditor5-react'
+  );
+  const ClassicEditor = import(
+    /* webpackChunkName: 'classiCk' */ '@ckeditor/ckeditor5-build-classic'
+  );
 
   const editorConfiguration = {
     heading: {
