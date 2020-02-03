@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { map } from 'lodash';
 import { Label } from 'semantic-ui-react';
+import { Form, Grid } from 'semantic-ui-react';
 
 class CKEditorWidget extends Component {
   constructor(props) {
@@ -26,13 +27,13 @@ class CKEditorWidget extends Component {
   render() {
     const {
       id,
-      // title,
-      // required,
-      // description,
+      title,
+      required,
+      description,
       error,
       value,
       onChange,
-      // fieldSet,
+      fieldSet,
     } = this.props;
 
     const editorConfiguration = {
@@ -72,24 +73,49 @@ class CKEditorWidget extends Component {
     if (!(CKEditor && ClassicEditor)) return 'Loading...';
 
     return (
-      <>
-        <CKEditor
-          id={`field-${id}`}
-          name={id}
-          config={editorConfiguration}
-          editor={ClassicEditor}
-          data={value || ''}
-          onInit={editor => {}}
-          onChange={(event, editor) => onChange(id, editor.getData())}
-          onBlur={(event, editor) => {}}
-          onFocus={(event, editor) => {}}
-        />
-        {map(error, message => (
-          <Label key={message} basic color="red" pointing>
-            {message}
-          </Label>
-        ))}
-      </>
+      <Form.Field
+        inline
+        required={required}
+        className={description ? 'help ckeditor' : 'ckeditor'}
+        id={`${fieldSet || 'field'}-${id}`}
+      >
+        <Grid>
+          <Grid.Row>
+            <Grid.Column width="12">
+              <div className="wrapper">
+                <label htmlFor="field-align">{title}</label>
+              </div>
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column columns={12}>
+              <CKEditor
+                id={`field-${id}`}
+                name={id}
+                config={editorConfiguration}
+                editor={ClassicEditor}
+                data={value || ''}
+                onInit={editor => {}}
+                onChange={(event, editor) => onChange(id, editor.getData())}
+                onBlur={(event, editor) => {}}
+                onFocus={(event, editor) => {}}
+              />
+              {map(error, message => (
+                <Label key={message} basic color="red" pointing>
+                  {message}
+                </Label>
+              ))}
+            </Grid.Column>
+          </Grid.Row>
+          {description && (
+            <Grid.Row stretched>
+              <Grid.Column stretched width="12">
+                <p className="help">{description}</p>
+              </Grid.Column>
+            </Grid.Row>
+          )}
+        </Grid>
+      </Form.Field>
     );
   }
 }
