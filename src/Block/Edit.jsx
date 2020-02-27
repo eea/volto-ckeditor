@@ -7,11 +7,17 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import cx from 'classnames';
+import { Icon } from '@plone/volto/components';
+import addSVG from '@plone/volto/icons/add.svg';
+import { BodyClass } from '@plone/volto/helpers';
+
+
 
 // import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
 // import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
 // import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
 // import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
+
 
 /**
  * Edit text block class.
@@ -100,7 +106,6 @@ class Edit extends Component {
 
     const CKEditor = this.state.CKEditor;
     const ClassicEditor = this.state.ClassicEditor;
-    console.log('asdsdas', CKEditor, ClassicEditor)
     // console.log(
     //   'plugins',
     //   ClassicEditor.builtinPlugins.map(plugin => plugin.pluginName),
@@ -164,26 +169,37 @@ class Edit extends Component {
         role="presentation"
         // onClick={() => this.props.onSelectBlock(this.props.block)}
         className={cx('block text', { selected: this.props.selected })}
-        // ref={node => (this.ref = node)}
+      // ref={node => (this.ref = node)}
       >
+        <BodyClass className="ck-editor-toolbar" />
         {CKEditor && ClassicEditor ? (
-          <CKEditor
-            config={editorConfiguration}
-            editor={ClassicEditor}
-            data={this.state.htmltext}
-            onInit={editor => {
-              // You can store the "editor" and use when it is needed.
-              // console.log('Editor is ready to use!', editor);
-              this.node = editor.ui.getEditableElement();
-              this.node.focus();
-            }}
-            onChange={this.onChange}
-            onBlur={(event, editor) => {}}
-            onFocus={(event, editor) => {}}
-          />
+          <React.Fragment>
+            <CKEditor
+              config={editorConfiguration}
+              editor={ClassicEditor}
+              data={this.state.htmltext}
+              onInit={editor => {
+                // You can store the "editor" and use when it is needed.
+                // console.log('Editor is ready to use!', editor);
+                this.node = editor.ui.getEditableElement();
+                this.node.focus();
+              }}
+              onChange={this.onChange}
+              onBlur={(event, editor) => { }}
+              onFocus={(event, editor) => { }}
+            />
+            <button
+              style={{
+                position: 'absolute', top: "6px", right: "6px", padding: 0, background: "#FAFAFA", border: 'none', outline: 'none', borderRadius: "5px",
+                width: "30px", padding: '2px'
+              }}
+              onClick={() => this.props.onAddBlock('text', this.props.index + 1)}>
+              <Icon name={addSVG} size="22px" />
+            </button>
+          </React.Fragment>
         ) : (
-          'asdsdassa'
-        )}
+            'asdsdassa'
+          )}
       </div>
     );
   }
